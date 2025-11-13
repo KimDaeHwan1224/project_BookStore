@@ -39,11 +39,11 @@ header{ position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px s
 
 /* Sub header */
 .subhead{
-  background: linear-gradient(135deg, #665c54 0%, #8b4f2f 100%); /* 색 통일 */
+  background: linear-gradient(135deg, #665c54 0%, #8b4f2f 100%);
   color:#fff;
-  padding: 40px 20px;             /* 세로 크기(높이) 통일: 필요시 34→40으로 */
-  min-height: 140px;              /* 고정 최소 높이(선택) */
-  display:flex;                   /* 내용 수직 가운데 */
+  padding: 40px 20px;
+  min-height: 140px;
+  display:flex;
   align-items:center;
 }
 .subwrap{
@@ -115,22 +115,77 @@ header{ position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px s
 
 /* 이미지 스타일 추가 */
 .thumb img {
-  width: auto;      /* 원하는 가로 크기 */
-  height: 100%;     /* 원하는 세로 크기 */
-  object-fit: cover;  /* 비율 유지하며 잘림 방지 */
+  width: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  position: absolute; /* thumb 위에 표시 */
+  position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* 중앙 정렬 */
+  transform: translate(-50%, -50%);
   z-index: 1;
   border-radius: 0;
 }
 
 .badge{
   position:absolute; left:12px; top:12px; background:#000; color:#fff; font-size:12px;
-  padding:4px 8px; border-radius:8px; opacity:.8; z-index: 2; /* 이미지 위 */
+  padding:4px 8px; border-radius:8px; opacity:.8; z-index: 2;
 }
+
+/* 하트 버튼 스타일 */
+.heart-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.heart-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.heart-btn svg {
+  width: 20px;
+  height: 20px;
+  transition: all 0.2s ease;
+}
+
+/* 빈 하트 (기본) */
+.heart-btn .heart-empty {
+  fill: none;
+  stroke: #666;
+  stroke-width: 2;
+}
+
+/* 채워진 하트 (활성화) */
+.heart-btn.active .heart-empty {
+  fill: #e74c3c;
+  stroke: #e74c3c;
+}
+
+.heart-btn.active svg {
+  animation: heartBeat 0.3s ease;
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
 .info {
   padding: 18px;
   display: flex;
@@ -138,7 +193,7 @@ header{ position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px s
   justify-content: space-between;
   gap: 8px;
   position: relative;
-  min-height: 150px; /* 카드 내용 높이 확보 (필요 시 조정) */
+  min-height: 150px;
 }
 
 /* 가격과 장바구니 버튼 정렬 */
@@ -146,7 +201,7 @@ header{ position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px s
   margin-top: 10px;
   display: flex;
   align-items: center;
-  justify-content: space-between;  /* 가격 왼쪽, 버튼 오른쪽 */
+  justify-content: space-between;
 }
 
 /* 장바구니 버튼 디자인 */
@@ -217,6 +272,6 @@ header{ position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px s
 .title-sm a.title-link:hover,
 .title-sm a.title-link:focus,
 .title-sm a.title-link:active {
-  color: #1c1c1c;          /* hover 시에도 색 변화 없음 */
-  text-decoration: none;   /* 밑줄 없음 */
+  color: #1c1c1c;
+  text-decoration: none;
 }
