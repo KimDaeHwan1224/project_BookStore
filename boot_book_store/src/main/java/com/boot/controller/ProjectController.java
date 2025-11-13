@@ -467,4 +467,19 @@ public class ProjectController {
 		// /WEB-INF/views/search/search.jsp 로 forward
 		return "board";
 	}
+	//	관리자 화면에서 게시판을 불러옴
+	@GetMapping("/admin/boardManagement")
+	public String boardManagement() {
+	    return "admin/boardManagement"; // list.jsp
+	}
+//	관리자 화면에서 게시판을 불러옴
+	@GetMapping("/admin/noticeManagement")
+	public String noticeManagement() {
+		return "admin/noticeManagement"; // list.jsp
+	}
+//	관리자 화면에서 게시판을 불러옴
+	@GetMapping("/admin/qnaManagement")
+	public String qnaManagement() {
+		return "admin/qnaManagement"; // list.jsp
+	}
 }
