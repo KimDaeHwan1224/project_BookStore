@@ -167,5 +167,32 @@
 
    <!-- External JS -->
    <script defer src="/js/search.js"></script>
+   
+   <!-- URL 파라미터 메시지 처리 -->
+   <script>
+     document.addEventListener("DOMContentLoaded", function() {
+       try {
+         const urlParams = new URLSearchParams(window.location.search);
+         const message = urlParams.get("message");
+         
+         // 메시지가 있고 유효한 값일 때만 표시
+         if (message !== null && 
+             message !== undefined &&
+             typeof message === 'string' &&
+             message.trim() !== "" && 
+             message.trim() !== "null" && 
+             message.trim() !== "undefined" &&
+             message.toLowerCase().trim() !== "no message available") {
+           alert(message.trim());
+           // URL에서 메시지 파라미터 제거
+           const newUrl = window.location.pathname + 
+             (window.location.search.replace(/[?&]message=[^&]*/, '').replace(/^\?/, '') || '');
+           window.history.replaceState({}, document.title, newUrl);
+         }
+       } catch (e) {
+         console.error("메시지 처리 오류:", e);
+       }
+     });
+   </script>
 </body>
 </html>
