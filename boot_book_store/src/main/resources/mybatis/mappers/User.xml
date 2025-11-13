@@ -7,77 +7,77 @@
 
   <select id="loginYn" parameterType="hashmap" resultType="string">
         select user_pw from users where user_id=#{user_id}
-    </select>
+  </select>
     
-    <insert id="register" parameterType="hashmap">
+  <insert id="register" parameterType="hashmap">
         insert into users(user_id, user_pw, user_email, user_phone_num, user_post_num, user_address, user_detail_address, user_name, user_nickname) 
         values(#{user_id},#{user_pw},#{user_email},#{user_phone_num},#{user_post_num},#{user_address},#{user_detail_address},#{user_name},#{user_nickname})
-    </insert>
+  </insert>
 	
-<!-- 	아이디 중복 체크 -->
-    <select id="checkId" parameterType="string" resultType="int">
+  <!-- 	아이디 중복 체크 -->
+  <select id="checkId" parameterType="string" resultType="int">
         select count(*) from users where user_id = #{user_id}
-    </select>
+  </select>
     
-<!--     이메일 중복 체크 -->
-    <select id="checkEmail" parameterType="String" resultType="int">
+  <!--     이메일 중복 체크 -->
+  <select id="checkEmail" parameterType="String" resultType="int">
     	select count(*) from users where user_email = #{user_email}
-	</select>
+  </select>
     
-    <select id="findIdByEmail" parameterType="String" resultType="String">
+  <select id="findIdByEmail" parameterType="String" resultType="String">
         select user_id from users where user_email = #{user_email}
-    </select>
+  </select>
     
-<!--     아이디, 이메일로 비밀번호를 찾음 -->
-    <select id="findPwByIdEmail" parameterType="map" resultType="string">
+  <!--     아이디, 이메일로 비밀번호를 찾음 -->
+  <select id="findPwByIdEmail" parameterType="map" resultType="string">
         select user_id from users where user_id = #{user_id} and user_email = #{user_email}
-    </select>
+  </select>
     
-<!--     사용자의 아이디와 생성된 토큰을 받아, 데이터베이스 토큰을 저장(사용자가 재설정할 권한이 있음을 증명) -->
- 	<update id="saveResetToken" parameterType="map">
+  <!--     사용자의 아이디와 생성된 토큰을 받아, 데이터베이스 토큰을 저장(사용자가 재설정할 권한이 있음을 증명) -->
+  <update id="saveResetToken" parameterType="map">
  		update users set user_pwd_reset= #{user_pwd_reset} where user_id= #{user_id}
- 	</update>
+  </update>
  	
-<!-- 	 토큰으로 사용자 조회 -->
-    <select id="findUserByResetToken" parameterType="string" resultType="com.boot.dto.UserDTO">
+  <!-- 	 토큰으로 사용자 조회 -->
+  <select id="findUserByResetToken" parameterType="string" resultType="com.boot.dto.UserDTO">
         select * from users where user_pwd_reset = #{user_pwd_reset}
-    </select>
+  </select>
  	
-<!--  	토큰으로 비밀번호 업데이트 -->
- 	<update id="updatePasswordByToken" parameterType="hashmap">
+  <!--  	토큰으로 비밀번호 업데이트 -->
+  <update id="updatePasswordByToken" parameterType="hashmap">
  		update users set user_pw= #{user_pw},user_pwd_reset = NULL where user_pwd_reset= #{user_pwd_reset}
- 	</update>
+  </update>
  
-   <!-- 아이디로 회원 정보 조회 (잠금상태, 세션용) -->
-    <select id="getUserById" parameterType="string" resultType="com.boot.dto.UserDTO">
+  <!-- 아이디로 회원 정보 조회 (잠금상태, 세션용) -->
+  <select id="getUserById" parameterType="string" resultType="com.boot.dto.UserDTO">
         SELECT *
         FROM users
         WHERE user_id = #{user_id}
-    </select>
+  </select>
  	
-	<!-- 로그인 실패 시 시도 횟수 +1, 시간 갱신 -->
-    <update id="updateLoginFail">
+  <!-- 로그인 실패 시 시도 횟수 +1, 시간 갱신 -->
+  <update id="updateLoginFail">
         UPDATE users
         SET login_fail_count = login_fail_count + 1,
             last_fail_time = SYSDATE
         WHERE user_id = #{user_id}
-    </update>
+  </update>
 
-    <!-- 로그인 성공 시 초기화 -->
-    <update id="resetLoginFail">
+  <!-- 로그인 성공 시 초기화 -->
+  <update id="resetLoginFail">
         UPDATE users
         SET login_fail_count = 0,
             last_fail_time = NULL
         WHERE user_id = #{user_id}
-    </update>
+  </update>
     
-	<!-- 이메일로 기존 회원 조회 -->
-	<select id="getUserByEmail" parameterType="string" resultType="com.boot.dto.UserDTO">
+  <!-- 이메일로 기존 회원 조회 -->
+  <select id="getUserByEmail" parameterType="string" resultType="com.boot.dto.UserDTO">
 	    SELECT * FROM users WHERE user_email = #{user_email}
-	</select>
+  </select>
 	
-	<!-- 소셜 신규 회원 등록 -->
-	<insert id="insertSocialUser" parameterType="map">
+  <!-- 소셜 신규 회원 등록 -->
+  <insert id="insertSocialUser" parameterType="map">
         INSERT INTO users (
             user_id,
             user_pw,
@@ -107,24 +107,25 @@
             '범내골',
             SYSDATE
         )
-    </insert>
-  <!-- 마이페이지: 단건 조회 -->
-  <select id="selectUser" parameterType="hashmap" resultType="hashmap">
-  SELECT
-      user_id            AS "user_id",
-      user_name          AS "user_name",
-      user_nickname      AS "user_nickname",
-      user_email         AS "user_email",
-      user_phone_num     AS "user_phone_num",
-      user_post_num      AS "user_post_num",
-      user_address       AS "user_address",
-      user_detail_address AS "user_detail_address",
-      TO_CHAR(reg_date, 'YYYY-MM-DD') AS "reg_date",
-      TO_CHAR(last_login_date, 'YYYY-MM-DD') AS "last_login_date"
-  FROM users
-  WHERE user_id = #{user_id, jdbcType=VARCHAR}
-</select>
+  </insert>
 
+  <!-- 🔥 마이페이지: 단건 조회 (여기에 user_role 추가됨) -->
+  <select id="selectUser" parameterType="hashmap" resultType="hashmap">
+    SELECT
+        user_id             AS "user_id",
+        user_name           AS "user_name",
+        user_nickname       AS "user_nickname",
+        user_email          AS "user_email",
+        user_phone_num      AS "user_phone_num",
+        user_post_num       AS "user_post_num",
+        user_address        AS "user_address",
+        user_detail_address AS "user_detail_address",
+        user_role           AS "user_role",          <!-- ⭐ 이 줄 추가 핵심 -->
+        TO_CHAR(reg_date, 'YYYY-MM-DD')        AS "reg_date",
+        TO_CHAR(last_login_date, 'YYYY-MM-DD') AS "last_login_date"
+    FROM users
+    WHERE user_id = #{user_id, jdbcType=VARCHAR}
+  </select>
 
   <!-- 마이페이지: 정보 수정 (비밀번호 제외) -->
   <update id="updateUser" parameterType="hashmap">
@@ -137,20 +138,19 @@
            user_address         = #{user_address, jdbcType=VARCHAR},
            user_detail_address  = #{user_detail_address, jdbcType=VARCHAR}
      WHERE user_id = #{user_id, jdbcType=VARCHAR}
-</update>
+  </update>
 
-	<delete id="withdraw" parameterType="hashmap">
+  <delete id="withdraw" parameterType="hashmap">
 	  DELETE FROM users
 	  WHERE user_id = #{user_id, jdbcType=VARCHAR}
 	    AND user_pw = #{user_pw, jdbcType=VARCHAR}
-	</delete>
+  </delete>
 	
-	<!-- 소셜 로그인 회원 탈퇴 -->
-	<delete id="withdrawSocial" parameterType="map">
+  <!-- 소셜 로그인 회원 탈퇴 -->
+  <delete id="withdrawSocial" parameterType="map">
 	  DELETE FROM users
 	  WHERE user_id = #{user_id, jdbcType=VARCHAR}
 	    AND login_type = #{login_type, jdbcType=VARCHAR}
-	</delete>
+  </delete>
 
 </mapper>
-
