@@ -33,7 +33,6 @@ import com.boot.dto.BookBuyDTO;
 import com.boot.dto.CartDTO;
 import com.boot.dto.UserDTO;
 import com.boot.service.UserServicelmpl;
-import com.boot.service.WishlistService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,27 +47,11 @@ public class ProjectController {
     private BookBuyDAO bookBuyDAO;
     @Autowired
     private CartDAO cartDAO;
-    @Autowired
-    private WishlistService wishlistService;
 
     // ------------------ 메인 ------------------
 	@GetMapping("/main")
 	public String main(HttpSession session) {
 		return "main";
-	}
-
-	// ------------------ 관리자 메인 ------------------
-	@GetMapping("/adminMain")
-	public String adminMain(HttpSession session) {
-
-	    String role = (String) session.getAttribute("userRole");
-
-	    // 로그인 안 했거나 권한이 ADMIN이 아님 → 메인으로
-	    if (role == null || !role.equals("ADMIN")) {
-	        return "redirect:/main";
-	    }
-
-	    return "admin/adminMain";
 	}
 
 	// ------------------ 회원가입 ------------------
@@ -137,12 +120,12 @@ public class ProjectController {
             Map<String, Object> userInfo = userService.getUser(userId);
             if (userInfo != null) {
                 String name = (String) userInfo.get("user_name");
+                String nickname = (String) userInfo.get("user_nickname"); // 닉네임 키 정확히 맞추기
                 session.setAttribute("loginDisplayName", name);
-                
-                session.setAttribute("userRole", userInfo.get("user_role"));
-
+                session.setAttribute("user_nickname", nickname); // ⭐️ 닉네임 세션에 저장!
+                System.out.println("로그인 닉네임값: " + nickname);
             }
-
+            
             // 로그인 성공 후 메인으로 이동
             return "redirect:/main";
         } else {
@@ -176,38 +159,36 @@ public class ProjectController {
 	// ------------------ 마이페이지 ------------------
 	@RequestMapping(value = "/mypage", method = RequestMethod.GET)
 	public String mypage(Model model, HttpSession session) {
-		String loginId = (String) session.getAttribute("loginId");
-		if (loginId == null)
-			return "redirect:/login";
+	    String loginId = (String) session.getAttribute("loginId");
+	    if (loginId == null) return "redirect:/login";
 
-		Map<String, Object> user = userService.getUser(loginId);
-		model.addAttribute("user", user);
-		
-		// ✅ 이름으로 세션 표시 업데이트
-        if (user != null) {
-            String name = (String) user.get("user_name");
-            session.setAttribute("loginDisplayName", name);
-        }
-        
-		return "/MyPage/myinfo"; // /WEB-INF/views/myinfo.jsp
+	    Map<String, Object> user = userService.getUser(loginId);
+	    model.addAttribute("user", user);
+
+	    if (user != null) {
+	        String name = (String) user.get("user_name");
+	        String nickname = (String) user.get("user_nickname"); // ★ 추가
+	        session.setAttribute("loginDisplayName", name);
+	        session.setAttribute("user_nickname", nickname);      // ★ 추가
+	    }
+	    return "/MyPage/myinfo";
 	}
 
 	@RequestMapping(value = "/mypage/edit", method = RequestMethod.GET)
 	public String mypageEdit(Model model, HttpSession session) {
-		String loginId = (String) session.getAttribute("loginId");
-		if (loginId == null)
-			return "redirect:/login";
+	    String loginId = (String) session.getAttribute("loginId");
+	    if (loginId == null) return "redirect:/login";
 
-		Map<String, Object> user = userService.getUser(loginId);
-		model.addAttribute("user", user);
-		
-		// ✅ 이름으로 세션 표시 업데이트
-        if (user != null) {
-            String name = (String) user.get("user_name");
-            session.setAttribute("loginDisplayName", name);
-        }
-        
-		return "/MyPage/myinfo_edit";
+	    Map<String, Object> user = userService.getUser(loginId);
+	    model.addAttribute("user", user);
+
+	    if (user != null) {
+	        String name = (String) user.get("user_name");
+	        String nickname = (String) user.get("user_nickname"); // ★ 추가
+	        session.setAttribute("loginDisplayName", name);
+	        session.setAttribute("user_nickname", nickname);      // ★ 추가
+	    }
+	    return "/MyPage/myinfo_edit";
 	}
 
 	@RequestMapping(value = "/mypage/update", method = RequestMethod.POST)
@@ -219,27 +200,6 @@ public class ProjectController {
 		param.put("user_id", loginId);
 		userService.updateUser(param);
 		return "redirect:/mypage";
-	}
-
-	// ------------------ 찜 목록 ------------------
-	@RequestMapping(value = "/wishlist", method = RequestMethod.GET)
-	public String wishlist(Model model, HttpSession session) {
-		String loginId = (String) session.getAttribute("loginId");
-		if (loginId == null)
-			return "redirect:/login";
-
-		// ✅ 이름으로 세션 표시 업데이트
-		Map<String, Object> userInfo = userService.getUser(loginId);
-		if (userInfo != null) {
-			String name = (String) userInfo.get("user_name");
-			session.setAttribute("loginDisplayName", name);
-		}
-
-		// 찜 목록 조회
-		List<com.boot.dto.WishlistDTO> wishlist = wishlistService.getWishlistByUserId(loginId);
-		model.addAttribute("wishlist", wishlist);
-
-		return "MyPage/wishlist";
 	}
 
 	// ------------------ 회원탈퇴 ------------------
@@ -464,7 +424,9 @@ public class ProjectController {
         Map<String, Object> userInfo = userService.getUser(userId);
         if (userInfo != null) {
             String name = (String) userInfo.get("user_name");
+            String nickname = (String) userInfo.get("user_nickname");
             session.setAttribute("loginDisplayName", name);
+            session.setAttribute("user_nickname", nickname); // ★ 추가
         }
 
         List<BookBuyDTO> purchaseList = bookBuyDAO.selectPurchaseListByUserId(userId);
@@ -477,21 +439,5 @@ public class ProjectController {
 	public String board() {
 		// /WEB-INF/views/search/search.jsp 로 forward
 		return "board";
-	}
-	
-//	관리자 화면에서 게시판을 불러옴
-	@GetMapping("/admin/boardManagement")
-	public String boardManagement() {
-	    return "admin/boardManagement"; // list.jsp
-	}
-//	관리자 화면에서 게시판을 불러옴
-//	@GetMapping("/admin/noticeManagement")
-//	public String noticeManagement() {
-//		return "admin/noticeManagement"; // list.jsp
-//	}
-//	관리자 화면에서 게시판을 불러옴
-	@GetMapping("/admin/qnaManagement")
-	public String qnaManagement() {
-		return "admin/qnaManagement"; // list.jsp
 	}
 }
