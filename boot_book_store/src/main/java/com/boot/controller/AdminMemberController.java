@@ -87,5 +87,30 @@ public class AdminMemberController {
     public Map<String, Object> detailData(@RequestParam("user_id") String userId) {
         return adminMemberService.getMemberById(userId);
     }
+    
+    @PostMapping("/updateRole")
+    @ResponseBody
+    public String updateRole(@RequestBody Map<String, Object> param) {
+        System.out.println("★ 권한 변경 요청 => " + param);
 
+        int updated = adminMemberService.updateRole(param);
+        System.out.println("★ 업데이트된 row => " + updated);
+
+        return "OK";
+    }
+
+    @GetMapping("/authority")
+    public String authority(Model model) {
+
+        List<Map<String, Object>> members = adminMemberService.getAllMembers();
+        List<Map<String, Object>> admins  = adminMemberService.getAdmins();
+
+        model.addAttribute("members", members);
+        model.addAttribute("admins", admins);
+
+        return "admin/authorityList";
+    }
+
+    
+    
 }
