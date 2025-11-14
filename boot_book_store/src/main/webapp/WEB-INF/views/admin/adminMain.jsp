@@ -26,7 +26,10 @@
             <li class="nav-item">
 				<button data-page="/admin/member/adminlist">회원관리</button>
 			</li>
-            <li class="nav-item"><button>권한관리</button></li>
+			<li class="nav-item">
+			    <button data-page="/admin/member/authority">권한관리</button>
+			</li>
+
           </ul>
         </div>
 
@@ -105,19 +108,47 @@
     </main>
   </div>
   <script>
-    // 공통 페이지 로더
-    function loadPage(url) {
-      fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById("content-area").innerHTML = html;
-        })
-        .catch(err => {
-          document.getElementById("content-area").innerHTML =
-            "<div style='padding:20px;color:red'>페이지 로딩 실패</div>";
-        });
-    }
+	// 공통 페이지 로더
+	function loadPage(pageUrl) {
 
+	  fetch(pageUrl)
+	    .then(res => res.text())
+	    .then(html => {
+	      document.getElementById("content-area").innerHTML = html;
+
+	      // ❗ 페이지 로드 후 필요한 후처리 실행
+	      afterLoad(pageUrl);
+	    })
+	    .catch(err => {
+	      document.getElementById("content-area").innerHTML =
+	        "<div style='padding:20px;color:red'>페이지 로딩 실패</div>";
+	    });
+	}
+
+	
+	// 페이지 로드 후 처리 (memberDetail 일 때만)
+	function afterLoad(pageUrl) {
+
+	  // 회원 상세 페이지일 때만 실행
+	  if (pageUrl.startsWith("/admin/member/detail")) {
+
+	    const urlParams = new URLSearchParams(pageUrl.split("?")[1]);
+	    const userId = urlParams.get("user_id");
+
+	    fetch("/admin/member/detailData?user_id=" + userId)
+	      .then(res => res.json())
+	      .then(data => {
+
+	        document.querySelector("input[name='user_id']").value = data.USER_ID;
+	        document.querySelector("input[name='user_name']").value = data.USER_NAME;
+	        document.querySelector("input[name='user_nickname']").value = data.USER_NICKNAME;
+	        document.querySelector("input[name='user_email']").value = data.USER_EMAIL;
+	        document.querySelector("input[name='user_phone_num']").value = data.USER_PHONE_NUM;
+	        document.querySelector("input[name='user_address']").value = data.USER_ADDRESS;
+	        document.querySelector("input[name='user_detail_address']").value = data.USER_DETAIL_ADDRESS;
+	      });
+	  }
+	}
     // 메뉴 클릭 이벤트 연결
     document.querySelectorAll('.nav-item button').forEach(btn => {
       btn.addEventListener("click", () => {
@@ -127,6 +158,79 @@
         }
       });
     });
+	function saveMember() {
+
+	  const formData = {
+	    user_id: document.querySelector("input[name='user_id']").value,
+	    user_nickname: document.querySelector("input[name='user_nickname']").value,
+	    user_email: document.querySelector("input[name='user_email']").value,
+	    user_phone_num: document.querySelector("input[name='user_phone_num']").value,
+	    user_address: document.querySelector("input[name='user_address']").value,
+	    user_detail_address: document.querySelector("input[name='user_detail_address']").value
+	  };
+
+	  fetch("/admin/member/edit", {
+	    method: "POST",
+	    headers: {"Content-Type": "application/json"},
+	    body: JSON.stringify(formData)
+	  })
+	    .then(res => res.json())
+	    .then(result => {
+
+	      alert("수정이 완료되었습니다.");
+
+	      // 다시 회원 목록으로 이동
+	      loadPage("/admin/member/adminlist");
+	    })
+	    .catch(err => {
+	      alert("에러 발생");
+	    });
+	}
+
+	// ===== 권한 변경 처리 =====
+	function updateRole(userId) {
+	  const newRole = document.getElementById("role_" + userId).value;
+
+	  fetch("/admin/member/updateRole", {
+	      method: "POST",
+	      headers: { "Content-Type": "application/json" },
+	      body: JSON.stringify({
+	        user_id: userId,
+	        user_role: newRole
+	      })
+	    })
+	    .then(res => res.text())
+	    .then(result => {
+	      alert("권한이 변경되었습니다.");
+	      loadPage("/admin/member/authority");
+	    })
+	    .catch(err => {
+	      console.error(err);
+	      alert("오류 발생");
+	    });
+	}
+	function removeAdmin(userId) {
+	    if (!confirm("해당 사용자의 관리자 권한을 제거하시겠습니까?")) return;
+
+	    fetch("/admin/member/updateRole", {
+	        method: "POST",
+	        headers: {"Content-Type": "application/json"},
+	        body: JSON.stringify({
+	            user_id: userId,
+	            user_role: "USER"
+	        })
+	    })
+	    .then(res => res.text())
+	    .then(result => {
+	        alert("관리자 권한이 제거되었습니다.");
+	        loadPage("/admin/member/authority");
+	    })
+	    .catch(err => {
+	        alert("오류 발생");
+	    });
+	}
+
+	
   </script>
 </body>
 </html>
