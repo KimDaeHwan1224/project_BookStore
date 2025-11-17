@@ -16,6 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="/css/cart.css">
+  <script src="https://js.tosspayments.com/v1"></script>
 </head>
 <body>
   <header>
@@ -79,7 +80,7 @@
             <tbody id="cartRows">
               <c:if test="${not empty cartList}">
                 <c:forEach var="item" items="${cartList}">
-                  <tr data-cart-id="${item.cart_id}" class="cart-row">
+                  <tr data-cart-id="${item.cart_id}" data-price="${item.book.book_price}" class="cart-row">
                     <td>
                       <input type="checkbox" class="cart-checkbox" value="${item.book.book_id}" />
                     </td>
@@ -95,7 +96,7 @@
                       </div>
                     </td>
                     <td>
-                      <input type="number" class="quantity-input" value="${item.quantity}" min="1" max="99" />
+                      <input type="number" class="quantity-input" value="${item.quantity}" min="1" max="99" data-book-id="${item.book.book_id}" />
                     </td>
                     <td class="price">₩${item.book.book_price * item.quantity}</td>
                   </tr>
@@ -122,10 +123,13 @@
             <hr style="border:none; border-top:1px solid #eee; margin:6px 0;">
             <div class="summary-line summary-total"><span>전체 주문 금액</span><span id="grandTotalText">₩0</span></div>
             <p class="fine">₩30,000 이상 구매 시 무료배송</p>
-            <div class="cart-ctas">
-              <a class="btn btn-ghost cta-full" href="<c:url value='/search'/>">계속 쇼핑하기</a>
-              <button class="btn btn-brand cta-full" id="checkoutBtn">주문하기</button>
-            </div>
+			<div class="cart-ctas">
+			  <div class="btn-row">
+			    <a class="btn btn-ghost" href="<c:url value='/search'/>">계속 쇼핑하기</a>
+			    <button class="btn btn-brand" id="checkoutBtn">주문하기</button>
+			  </div>
+			  <button class="btn btn-tosspay cta-full" id="tossPayBtn" type="button">토스페이 결제하기</button>
+			</div>
           </div>
         </div>
       </aside>
