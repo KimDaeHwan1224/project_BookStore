@@ -384,12 +384,6 @@ public class ProjectController {
         return "MyPage/purchaseDetail";
     }
 
-	
-//	관리자 화면에서 게시판을 불러옴
-	@GetMapping("/admin/boardManagement")
-	public String boardManagement() {
-	    return "admin/boardManagement"; // list.jsp
-	}
 //	관리자 화면에서 게시판을 불러옴
 	@GetMapping("/admin/qnaManagement")
 	public String qnaManagement() {
