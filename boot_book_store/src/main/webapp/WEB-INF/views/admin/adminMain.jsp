@@ -53,7 +53,11 @@
         <div class="nav-section">
           <div class="nav-section-title">도서관리</div>
           <ul class="nav-list">
-            <li class="nav-item"><button>도서 등록/삭제/수정</button></li>
+            <li class="nav-item">
+		      <button onclick="loadPage('/admin/book/list')">
+		        도서 등록/삭제/수정
+		      </button>
+		    </li>
             <li class="nav-item"><button>재고관리</button></li>
           </ul>
         </div>
@@ -339,6 +343,7 @@
   </script>
 </body>
 </html>
+
 
 
 
