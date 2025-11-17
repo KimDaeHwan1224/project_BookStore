@@ -12,11 +12,11 @@
     </select>
 
     <!-- 단건조회 -->
-    <select id="selectBookById" parameterType="int" resultType="com.boot.dto.BookDTO">
-        SELECT *
-        FROM Book
-        WHERE book_id = #{book_id}
-    </select>
+    <select id="findById" parameterType="int" resultType="com.boot.dto.BookDTO">
+    SELECT *
+    FROM Book
+    WHERE book_id = #{bookId}
+</select>
 
     <!-- 등록 -->
     <insert id="insertBook" parameterType="com.boot.dto.BookDTO">
