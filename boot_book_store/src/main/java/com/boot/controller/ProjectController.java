@@ -60,7 +60,15 @@ public class ProjectController {
 	// ------------------ 관리자 메인 ------------------
 	@GetMapping("/adminMain")
 	public String adminMain(HttpSession session) {
-		return "admin/adminMain";
+
+	    String role = (String) session.getAttribute("userRole");
+
+	    // 로그인 안 했거나 권한이 ADMIN이 아님 → 메인으로
+	    if (role == null || !role.equals("ADMIN")) {
+	        return "redirect:/main";
+	    }
+
+	    return "admin/adminMain";
 	}
 	
 	// ------------------ 회원가입 ------------------
@@ -129,12 +137,12 @@ public class ProjectController {
             Map<String, Object> userInfo = userService.getUser(userId);
             if (userInfo != null) {
                 String name = (String) userInfo.get("user_name");
-                String nickname = (String) userInfo.get("user_nickname"); // 닉네임 키 정확히 맞추기
                 session.setAttribute("loginDisplayName", name);
-                session.setAttribute("user_nickname", nickname); // ⭐️ 닉네임 세션에 저장!
-                System.out.println("로그인 닉네임값: " + nickname);
+                
+                session.setAttribute("userRole", userInfo.get("user_role"));
+
             }
-            
+
             // 로그인 성공 후 메인으로 이동
             return "redirect:/main";
         } else {
@@ -470,12 +478,20 @@ public class ProjectController {
 		// /WEB-INF/views/search/search.jsp 로 forward
 		return "board";
 	}
+	
+//	관리자 화면에서 게시판을 불러옴
 	@GetMapping("/admin/boardManagement")
-	public String boardManagement(HttpSession session) {
-		return "admin/boardManagement";
+	public String boardManagement() {
+	    return "admin/boardManagement"; // list.jsp
 	}
+//	관리자 화면에서 게시판을 불러옴
+	@GetMapping("/admin/noticeManagement")
+	public String noticeManagement() {
+		return "admin/noticeManagement"; // list.jsp
+	}
+//	관리자 화면에서 게시판을 불러옴
 	@GetMapping("/admin/qnaManagement")
-	public String qnaManagement(HttpSession session) {
-		return "admin/qnaManagement";
+	public String qnaManagement() {
+		return "admin/qnaManagement"; // list.jsp
 	}
 }
