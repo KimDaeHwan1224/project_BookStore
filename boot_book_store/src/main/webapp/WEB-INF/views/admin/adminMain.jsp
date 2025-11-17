@@ -71,7 +71,7 @@
         <div class="nav-section">
           <div class="nav-section-title">문의내역</div>
           <ul class="nav-list">
-            <li class="nav-item"><button>문의 리스트</button></li>
+            <li class="nav-item"><button data-page="/inquiry/admin/list">문의 리스트</button></li>
           </ul>
         </div>
 
