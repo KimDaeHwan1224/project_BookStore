@@ -20,7 +20,7 @@
       <div class="board-header">
 		<!-- ✅ 게시판 제목 + 선택창을 같은 줄로 배치 -->
 		<div style="display: inline-flex; align-items: center; gap: 8px;">
-		  <h1 class="board-title" style="margin: 0;">게시판</h1>
+		  <h1 class="board-title" style="margin: 0;">게시판 관리</h1>
 		</div>
 	  </div>
 
@@ -48,7 +48,9 @@
 	                <td>${board.boardNo}</td>
 	                <td>
 	                  <!-- 상세: 조회수 +1은 컨트롤러에서 처리 X (관리자용은 증가 안 함) -->
-	                   <a href="${pageContext.request.contextPath}/admin/board/detail?boardNo=${board.boardNo}">
+<!--	                   <a href="${pageContext.request.contextPath}/admin/board/detail?boardNo=${board.boardNo}">-->
+					  <a href="javascript:void(0)"
+						 onclick="loadPage('${pageContext.request.contextPath}/admin/board/detail?boardNo=${board.boardNo}')">
 	                    <c:out value="${board.boardTitle}" />
 	                  </a>
 	                </td>
@@ -65,7 +67,7 @@
 
 	  <!-- 검색 영역 -->
 	  <div class="board-search">
-	    <form method="get" action="${pageContext.request.contextPath}/boardManagement" id="searchForm">
+	    <form method="get" id="searchForm">
 	      <select name="type" style="padding: 12px; border: 2px solid #eee; border-radius: 12px; font-size: 14px; margin-right: 8px;">
 	        <option value="tc" ${type == 'tc' ? 'selected' : ''}>제목+내용</option>
 	        <option value="title" ${type == 'title' ? 'selected' : ''}>제목</option>
@@ -79,46 +81,44 @@
 	  </div>
 
 	  <!-- 페이지네이션 -->
-	  <div class="pagination">
-	    <c:if test="${startPage > 1}">
-	      <c:url var="prevUrl" value="/boardManagement">
-	        <c:param name="page" value="${startPage - 1}" />
-	        <c:param name="size" value="${size}" />
-	        <c:if test="${not empty keyword}">
-	          <c:param name="type" value="${type}" />
-	          <c:param name="keyword" value="${keyword}" />
-	        </c:if>
-	      </c:url>
-	      <a href="${pageContext.request.contextPath}${prevUrl}"><</a>
-	    </c:if>
+        <div class="pagination">
+          <c:if test="${startPage > 1}">
+  			<a href="javascript:void(0)"
+  	           onclick="loadPage('${pageContext.request.contextPath}/admin/boardManagement?page=${startPage-1}')">
+  	            <
+  	        </a>
+          </c:if>
 
-	    <c:forEach var="i" begin="${startPage}" end="${endPage}">
-	      <c:url var="pageUrl" value="/boardManagement">
-	        <c:param name="page" value="${i}" />
-	        <c:param name="size" value="${size}" />
-	        <c:if test="${not empty keyword}">
-	          <c:param name="type" value="${type}" />
-	          <c:param name="keyword" value="${keyword}" />
-	        </c:if>
-	      </c:url>
-	      <a href="${pageContext.request.contextPath}${pageUrl}" class="${i == page ? 'active' : ''}">${i}</a>
-	    </c:forEach>
+          <c:forEach var="i" begin="${startPage}" end="${endPage}">
+  			<a href="javascript:void(0)"
+  			   onclick="loadPage('${pageContext.request.contextPath}/admin/boardManagement?page=${i}')"
+  			   class="${i == page ? 'active' : ''}">${i}
+  			</a>
+          </c:forEach>
 
-	    <c:if test="${endPage < pageCount}">
-	      <c:url var="nextUrl" value="/boardManagement">
-	        <c:param name="page" value="${endPage + 1}" />
-	        <c:param name="size" value="${size}" />
-	        <c:if test="${not empty keyword}">
-	          <c:param name="type" value="${type}" />
-	          <c:param name="keyword" value="${keyword}" />
-	        </c:if>
-	      </c:url>
-	      <a href="${pageContext.request.contextPath}${nextUrl}">></a>
-	    </c:if>
-	  </div>
-	  </div>
-	  </section>
+          <c:if test="${endPage < pageCount}">
+  			<a href="javascript:void(0)"
+  			   onclick="loadPage('${pageContext.request.contextPath}/admin/boardManagement?page=${endPage+1}')">
+  			    >
+  			</a>
+          </c:if>
+        </div>
+      </div>
+    </section>
+  <script>
+  document.getElementById("searchForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // 기존 submit 막기
 
+      const type = this.type.value;
+      const keyword = this.keyword.value;
+
+      const url = "${pageContext.request.contextPath}/admin/boardManagement"
+                  + "?type=" + encodeURIComponent(type)
+                  + "&keyword=" + encodeURIComponent(keyword);
+
+      loadPage(url); // 비동기로 페이지 로드
+  });
+  </script>
 </body>
 </html>
 
