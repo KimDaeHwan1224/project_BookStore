@@ -26,4 +26,9 @@
 		WHERE genre_id = #{genre_id}
 		ORDER BY book_id
 	</select>
+
+<!-- 전체 개수 -->
+<select id="countBooks" resultType="int">
+    SELECT COUNT(*) FROM Book
+</select>
 </mapper>
