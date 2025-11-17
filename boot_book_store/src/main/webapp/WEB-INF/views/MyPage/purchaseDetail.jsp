@@ -52,20 +52,20 @@
             </tr>
           </thead>
           <tbody>
-            <c:forEach var="detail" items="${orderDetails}">
-              <tr>
-                <td>
-                  <img src="${detail.book_image_url}" alt="${detail.book_title}" class="thumb" />
-                </td>
-                <td>${detail.book_title}</td>
-                <td>${detail.quantity}</td>
-                <td>₩<fmt:formatNumber value="${detail.purchase_price}" type="currency" currencySymbol=""/></td>
-<!--                <td>₩<fmt:formatNumber value="${detail.shipping_fee}" type="currency" currencySymbol=""/></td>-->
-<!--                <td>-->
-<!--                  ₩<fmt:formatNumber value="${detail.purchase_price * detail.quantity + detail.shipping_fee}" type="currency" currencySymbol=""/>-->
-<!--                </td>-->
-              </tr>
-            </c:forEach>
+			<c:forEach var="detail" items="${orderDetails}">
+			  <tr>
+			    <td>
+			      <img src="${detail.book_image_url}" alt="${detail.book_title}" class="thumb" />
+			    </td>
+			    <td>
+			      <a href="<c:url value='/SearchDetail'/>?book_id=${detail.book_id}">
+			        ${detail.book_title}
+			      </a>
+			    </td>
+			    <td>${detail.quantity}</td>
+			    <td>₩<fmt:formatNumber value="${detail.purchase_price}" type="currency" currencySymbol=""/></td>
+			  </tr>
+			</c:forEach>
           </tbody>
         </table>
 
