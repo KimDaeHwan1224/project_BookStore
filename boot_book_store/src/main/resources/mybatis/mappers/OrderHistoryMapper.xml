@@ -39,31 +39,35 @@
     <!-- 주문 상단 정보 -->
     <select id="getOrderInfo" parameterType="int" resultType="com.boot.dto.OrderHistoryDetailDTO">
         SELECT 
-            o.order_id,
-            o.user_id,
-            u.user_name,
-            u.user_email,
-            o.total_quantity,
-            o.total_price,
-            o.shipping_fee,
-            TO_CHAR(o.order_date, 'YYYY-MM-DD HH24:MI') AS order_date
-        FROM Orders o
-        JOIN users u ON o.user_id = u.user_id
-        WHERE o.order_id = #{order_id}
+	        o.order_id,
+	        o.user_id,
+	        u.user_name,
+	        u.user_email,
+	        u.user_phone_num,
+	        u.user_address,
+	        u.user_detail_address,
+	        o.total_quantity,
+	        o.total_price,
+	        o.shipping_fee,
+	        o.order_date
+	    FROM Orders o
+	    JOIN Users u ON o.user_id = u.user_id
+	    WHERE o.order_id = #{order_id}
     </select>
 
     <!-- 주문 아이템 리스트 -->
     <select id="getOrderItems" parameterType="int" resultType="com.boot.dto.OrderHistoryItemDTO">
         SELECT
             od.order_detail_id,
-            b.book_id,
-            b.book_title,
-            b.book_writer,
-            od.purchase_price,
-            od.quantity
-        FROM OrderDetail od
-        JOIN Book b ON od.book_id = b.book_id
-        WHERE od.order_id = #{order_id}
+	        b.book_id,
+	        b.book_title,
+	        b.book_writer,
+	        b.book_image_path,
+	        od.purchase_price,
+	        od.quantity
+	    FROM OrderDetail od
+	    JOIN Book b ON od.book_id = b.book_id
+	    WHERE od.order_id = #{order_id}
     </select>
 	
 	<!-- 공통 SQL for 목록 -->
