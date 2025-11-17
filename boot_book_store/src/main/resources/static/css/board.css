@@ -1,3 +1,4 @@
+
 @charset "UTF-8";
 :root{
       --brand: #8b4f2f;
@@ -60,12 +61,38 @@
     .nav-right a{ color:#333; text-decoration:none; }
     .nav-right a:hover{ color:var(--brand-dark) }
     
+    
+    /* ✅ 게시판 상단: search 페이지와 동일하게 */
+    .boardhead {
+      background: linear-gradient(135deg, #665c54 0%, #8b4f2f 100%);
+      color: #fff;
+      padding: 34px 20px;
+    }
+    .boardsubwrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .boardsubwrap h1 {
+      margin: 0;
+      font-size: clamp(24px, 3.2vw, 32px);
+      font-weight: 800;
+    }
+    .boardsubwrap p {
+      margin-top: 8px;
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
     /* 메인 콘텐츠 */
     .main-content {
       max-width: 1100px;
       margin: 0 auto;
       padding: 40px 20px;
     }
+	.table-cell span.post-title {
+		font-weight: 700;
+	}
     
     /* 페이지 헤더 */
      .page-header {
