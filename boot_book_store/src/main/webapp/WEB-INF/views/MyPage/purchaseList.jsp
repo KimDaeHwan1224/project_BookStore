@@ -27,7 +27,7 @@
         <span id="userGreeting" style="color:var(--brand); font-weight:700;">
           <c:choose>
             <c:when test="true">
-              마이페이지
+              구매내역
             </c:when>
           </c:choose>
         </span>
@@ -48,6 +48,7 @@
            <div class="tab-nav">
                <button class="tab-button" onclick="location.href='${pageContext.request.contextPath}/mypage'">정보</button>
                <button class="tab-button" onclick="location.href='${pageContext.request.contextPath}/mypage/edit'">내정보 수정</button>
+               <button class="tab-button" onclick="location.href='<c:url value="/wishlist"/>'">찜 목록</button>
                <button class="tab-button active" onclick="location.href='${pageContext.request.contextPath}/MyPage/purchaseList'">구매내역</button>
                <button class="tab-button" onclick="location.href='${pageContext.request.contextPath}/mypage/withdraw'">회원탈퇴</button>
            </div>
