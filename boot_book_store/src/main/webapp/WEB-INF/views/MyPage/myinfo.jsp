@@ -67,7 +67,19 @@
               <div class="profile-row">
                 <div><div class="avatar" aria-hidden="true"></div></div>
                 <div>
-                  <div class="badge" title="등급">회원등급: <strong>일반</strong></div>
+                  <div class="badge" title="등급">
+				      회원등급: 
+				      <strong>
+				          <c:choose>
+				              <c:when test="${user.user_role eq 'ADMIN'}">
+				                  관리자
+				              </c:when>
+				              <c:otherwise>
+				                  일반
+				              </c:otherwise>
+				          </c:choose>
+				      </strong>
+				  </div>
                   <div class="kv"><strong>이름</strong><div><c:out value='${sessionScope.loginDisplayName}' /></div></div>
                   <div class="kv"><strong>닉네임</strong><div><c:out value="${user.user_nickname}" default="-"/></div></div>
                   <div class="kv"><strong>이메일</strong><div><c:out value="${user.user_email}" default="-"/></div></div>
