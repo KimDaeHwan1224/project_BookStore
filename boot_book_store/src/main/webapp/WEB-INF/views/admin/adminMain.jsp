@@ -13,8 +13,8 @@
     <!-- SIDEBAR -->
     <aside class="sidebar" aria-label="사이드바">
       <div class="brand">
-        <img src="/img/book_logo.png" class="brand-logo" alt="로고">
-        tqShop 관리자
+        <img src="/img/book_logo.png" alt="책갈피 로고" class="brand-logo" style="width:100px;height:40px;" />
+        <span style="color:#8B4513;font-weight:600;">관리자 페이지</span>
       </div>
 
       <nav class="nav">
@@ -92,17 +92,29 @@
       <!-- TOPBAR -->
       <header class="topbar">
         <div class="left">
-          <button aria-label="메뉴 토글" style="border:0;background:transparent;cursor:pointer;padding:6px;border-radius:8px;">
+        </div>
+
+        <div class="center">
+          <button aria-label="메뉴 토글" style="border:0;background:transparent;cursor:pointer;padding:6px;border-radius:8px;margin-right:12px;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M4 7h16M4 12h16M4 17h16" stroke="#374151" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M4 7h16M4 12h16M4 17h16" stroke="#8B4513" stroke-width="1.6" stroke-linecap="round"/>
             </svg>
           </button>
-          <div class="search">검색...</div>
+          <input type="text" placeholder="검색..." class="search-input" style="padding:8px 16px;border-radius:20px;border:1px solid #ddd;background:white;width:300px;outline:none;">
         </div>
 
         <div class="right">
-          <div style="font-size:13px;">내 사이트 바로가기</div>
-          <div style="font-size:13px;">관리자명</div>
+          <a href="<c:url value='/main'/>" style="color:#8B4513;font-size:13px;margin-right:12px;text-decoration:none;">사이트 바로가기</a>
+          <span style="color:#8B4513;font-size:13px;font-weight:700;">
+            <c:choose>
+              <c:when test="${not empty sessionScope.loginDisplayName}">
+                ${sessionScope.loginDisplayName}
+              </c:when>
+              <c:otherwise>
+                관리자명
+              </c:otherwise>
+            </c:choose>
+          </span>
         </div>
       </header>
 
@@ -139,17 +151,6 @@
 	      });
 
 	      // 🚀 페이지마다 초기화 함수 실행
-		  if (url.includes("/admin/board/edit")) {
-	        if (typeof initNoticeEdit === "function") {
-	          initNoticeEdit();
-	        }
-	      }
-
-	      if (url.includes("/admin/board/detail")) {
-	        if (typeof initNoticeDetail === "function") {
-	          initNoticeDetail();
-	        }
-	      }
 	      if (url.includes("/admin/notice/write")) {
 	        if (typeof initNoticeWrite === "function") {
 	          initNoticeWrite();
@@ -166,6 +167,11 @@
 	        if (typeof initNoticeDetail === "function") {
 	          initNoticeDetail();
 	        }
+	      }
+
+	      // 회원 상세 페이지 데이터 로드
+	      if (url.includes("/admin/member/detail")) {
+	        afterLoad(url);
 	      }
 	    })
 	    .catch(err => {
@@ -392,10 +398,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
