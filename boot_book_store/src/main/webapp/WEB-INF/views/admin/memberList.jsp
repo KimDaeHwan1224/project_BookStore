@@ -26,48 +26,67 @@
             width: 85%;
             margin: 0 auto;
             background: #ffffff;
-            border-radius: 16px; /* 📌 더 둥글게 */
-            padding: 10px 0 20px 0;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* 📌 깊은 그림자 */
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 15px;
+            margin: 0;
         }
 
         thead {
-            background: #6b4f34;  /* 📌 짙은 브라운 */
+            background: #6b4f34;
             color: white;
             font-size: 15px;
         }
 
         th {
-            padding: 14px 12px;
+            padding: 16px 12px;
             text-align: center;
             font-weight: 600;
+            border: none;
+        }
+
+        tbody {
+            background: #ffffff;
         }
 
         td {
-            padding: 16px 12px;
+            padding: 18px 12px;
             text-align: center;
-            border-bottom: 1px solid #ece4d9; /* 📌 연갈색 라인 */
+            border: none;
+            border-bottom: 1px solid #ece4d9;
             color: #4b3b2a;
+            background: #ffffff;
+        }
+
+        tbody tr {
+            background: #ffffff;
+            transition: background-color 0.2s;
         }
 
         tbody tr:hover {
-            background: #f8f5f1; /* 📌 은은한 hover */
+            background: #f8f5f1;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
         }
 
         .btn-edit, .btn-delete {
-            padding: 7px 18px;
+            padding: 8px 18px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
+            margin: 0 3px;
         }
 
         .btn-edit {
@@ -76,16 +95,34 @@
         }
 
         .btn-edit:hover {
-            background: #8a6141; /* 📌 hover */
+            background: #8a6141;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         .btn-delete {
-            background: #b6463b; /* 📌 따뜻한 레드 */
+            background: #b6463b;
             color: white;
         }
 
         .btn-delete:hover {
             background: #cc5247;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+            font-size: 15px;
         }
     </style>
 </head>
@@ -110,24 +147,34 @@
         </thead>
 
         <tbody>
-            <c:forEach var="m" items="${members}">
-                <tr>
-                    <td>${m.USER_ID}</td>
-                    <td>${m.USER_NAME}</td>
-                    <td>${m.USER_NICKNAME}</td>
-                    <td>${m.USER_EMAIL}</td>
-                    <td>${m.USER_PHONE_NUM}</td>
-                    <td>${m.LOGIN_TYPE}</td>
-                    <td>${m.REG_DATE}</td>
-
-                    <td>
-                        <button class="btn-edit"
-                                onclick="loadPage('/admin/member/detail?user_id=${m.USER_ID}')">수정</button>
-                        <button class="btn-delete"
-                                onclick="if(confirm('삭제할까요?')) loadPage('/admin/member/delete?user_id=${m.USER_ID}')">삭제</button>
-                    </td>
-                </tr>
-            </c:forEach>
+            <c:choose>
+                <c:when test="${empty members}">
+                    <tr>
+                        <td colspan="8" class="empty-message">등록된 회원이 없습니다.</td>
+                    </tr>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="m" items="${members}">
+                        <tr>
+                            <td>${m.USER_ID}</td>
+                            <td>${m.USER_NAME}</td>
+                            <td>${m.USER_NICKNAME}</td>
+                            <td>${m.USER_EMAIL}</td>
+                            <td>${m.USER_PHONE_NUM}</td>
+                            <td>${m.LOGIN_TYPE}</td>
+                            <td>${m.REG_DATE}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-edit"
+                                            onclick="loadPage('/admin/member/detail?user_id=${m.USER_ID}')">수정</button>
+                                    <button class="btn-delete"
+                                            onclick="if(confirm('정말 삭제하시겠습니까?')) loadPage('/admin/member/delete?user_id=${m.USER_ID}')">삭제</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
         </tbody>
     </table>
 </div>
