@@ -2,6 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f2eee9;
+      margin: 0;
+      padding: 0;
+    }
+
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -10,50 +17,52 @@
     }
 
     .stat-card {
-      background: white;
+      background: #ffffff;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
 
     .stat-card-title {
       font-size: 13px;
-      color: #6B7280;
+      color: #6b7280;
       margin-bottom: 8px;
     }
 
     .stat-card-value {
       font-size: 24px;
       font-weight: 700;
-      color: #111827;
+      color: #3e2c1c;
     }
 
     .inquiry-table {
       width: 100%;
       border-collapse: collapse;
       background: white;
-      border-radius: 8px;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
 
     .inquiry-table thead {
-      background-color: #F9FAFB;
+      background-color: #6b4f34;
     }
 
     .inquiry-table th {
-      padding: 12px 16px;
-      text-align: left;
+      padding: 14px 16px;
+      text-align: center;
       font-weight: 600;
-      color: #374151;
-      font-size: 13px;
-      border-bottom: 2px solid #E5E7EB;
+      color: white;
+      font-size: 15px;
+      border-bottom: none;
     }
 
     .inquiry-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid #E5E7EB;
-      font-size: 14px;
+      padding: 16px 16px;
+      border-bottom: 1px solid #ece4d9;
+      font-size: 15px;
+      color: #4b3b2a;
+      text-align: center;
     }
 
     .inquiry-table tbody tr {
@@ -62,7 +71,7 @@
     }
 
     .inquiry-table tbody tr:hover {
-      background-color: #F9FAFB;
+      background-color: #f8f5f1;
     }
 
     .inquiry-table tbody tr:last-child td {
@@ -78,41 +87,45 @@
     }
 
     .status-waiting {
-      background-color: #FEF3C7;
-      color: #92400E;
+      background-color: #fef3c7;
+      color: #92400e;
     }
 
     .status-completed {
-      background-color: #D1FAE5;
-      color: #065F46;
+      background-color: #d1fae5;
+      color: #065f46;
     }
 
     .btn-view {
-      background-color: #4F46E5;
+      background-color: #795438;
       color: white;
-      padding: 6px 12px;
+      padding: 7px 18px;
       border: none;
       border-radius: 6px;
       text-decoration: none;
-      font-size: 12px;
+      font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
       display: inline-block;
+      transition: 0.2s;
     }
 
     .btn-view:hover {
-      background-color: #4338CA;
+      background-color: #8a6141;
     }
 
     .btn-edit {
-      background-color: #10B981;
+      background-color: #10b981;
       color: white;
-      padding: 6px 12px;
+      padding: 7px 18px;
       border: none;
       border-radius: 6px;
       text-decoration: none;
-      font-size: 12px;
+      font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
       display: inline-block;
+      transition: 0.2s;
     }
 
     .btn-edit:hover {
