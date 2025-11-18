@@ -189,7 +189,7 @@
 <div class="title-header">
   <div class="title">게시판 관리</div>
   <div class="search-container">
-    <form class="search-form" method="get" action="${pageContext.request.contextPath}/boardManagement" id="searchForm">
+    <form class="search-form" method="get" id="searchForm">
       <select name="type">
         <option value="tc" ${type == 'tc' ? 'selected' : ''}>제목+내용</option>
         <option value="title" ${type == 'title' ? 'selected' : ''}>제목</option>
@@ -226,9 +226,10 @@
           <tr>
             <td>${board.boardNo}</td>
             <td class="title-cell">
-              <a class="link-title" href="${pageContext.request.contextPath}/admin/board/detail?boardNo=${board.boardNo}">
-                <c:out value="${board.boardTitle}" />
-              </a>
+				<a class="link-title" href="javascript:void(0)"
+				   onclick="loadPage('${pageContext.request.contextPath}/admin/board/detail?boardNo=${board.boardNo}')">
+                  <c:out value="${board.boardTitle}" />
+                </a>
             </td>
             <td>${board.userNickname}</td>
             <td>${board.formattedDate}</td>
@@ -242,42 +243,41 @@
 </div>
 
 <div class="pagination">
-  <c:if test="${startPage > 1}">
-    <c:url var="prevUrl" value="/boardManagement">
-      <c:param name="page" value="${startPage - 1}" />
-      <c:param name="size" value="${size}" />
-      <c:if test="${not empty keyword}">
-        <c:param name="type" value="${type}" />
-        <c:param name="keyword" value="${keyword}" />
+	<c:if test="${startPage > 1}">
+		<a href="javascript:void(0)"
+           onclick="loadPage('${pageContext.request.contextPath}/admin/boardManagement?page=${startPage-1}')">
+            &lt;
+        </a>
       </c:if>
-    </c:url>
-    <a href="${pageContext.request.contextPath}${prevUrl}">&lt;</a>
-  </c:if>
 
-  <c:forEach var="i" begin="${startPage}" end="${endPage}">
-    <c:url var="pageUrl" value="/boardManagement">
-      <c:param name="page" value="${i}" />
-      <c:param name="size" value="${size}" />
-      <c:if test="${not empty keyword}">
-        <c:param name="type" value="${type}" />
-        <c:param name="keyword" value="${keyword}" />
+      <c:forEach var="i" begin="${startPage}" end="${endPage}">
+		<a href="javascript:void(0)"
+		   onclick="loadPage('${pageContext.request.contextPath}/admin/boardManagement?page=${i}')"
+		   class="${i == page ? 'active' : ''}">${i}
+		</a>
+      </c:forEach>
+
+      <c:if test="${endPage < pageCount}">
+		<a href="javascript:void(0)"
+		   onclick="loadPage('${pageContext.request.contextPath}/admin/boardManagement?page=${endPage+1}')">
+		    &gt;
+		</a>
       </c:if>
-    </c:url>
-    <a href="${pageContext.request.contextPath}${pageUrl}" class="${i == page ? 'active' : ''}">${i}</a>
-  </c:forEach>
+    </div>
+  </div>
+<script>
+document.getElementById("searchForm").addEventListener("submit", function(e) {
+    e.preventDefault(); // 기존 submit 막기
 
-  <c:if test="${endPage < pageCount}">
-    <c:url var="nextUrl" value="/boardManagement">
-      <c:param name="page" value="${endPage + 1}" />
-      <c:param name="size" value="${size}" />
-      <c:if test="${not empty keyword}">
-        <c:param name="type" value="${type}" />
-        <c:param name="keyword" value="${keyword}" />
-      </c:if>
-    </c:url>
-    <a href="${pageContext.request.contextPath}${nextUrl}">&gt;</a>
-  </c:if>
-</div>
+    const type = this.type.value;
+    const keyword = this.keyword.value;
 
+    const url = "${pageContext.request.contextPath}/admin/boardManagement"
+                + "?type=" + encodeURIComponent(type)
+                + "&keyword=" + encodeURIComponent(keyword);
+
+    loadPage(url); // 비동기로 페이지 로드
+});
+</script>
 </body>
 </html>
