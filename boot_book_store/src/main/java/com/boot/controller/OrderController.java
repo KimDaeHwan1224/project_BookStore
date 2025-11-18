@@ -1,6 +1,7 @@
 package com.boot.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +28,9 @@ import com.boot.dto.BookDTO;
 import com.boot.dto.CartDTO;
 import com.boot.dto.OrderDTO;
 import com.boot.dto.OrderDetailDTO;
+import com.boot.dto.OrderRequestDTO;
 import com.boot.service.CartService;
-import com.boot.service.CartServiceImpl;
+import com.boot.service.OrderService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,7 +46,7 @@ public class OrderController {
 	@Autowired
 	private OrderDetailDAO orderDetailDAO;
 	@Autowired
-	private CartServiceImpl cartServiceImpl;
+	private OrderService orderService;
 	@Autowired
     private CartService cartService;
 
@@ -236,4 +238,22 @@ public class OrderController {
         log.info("Order processing completed, redirecting to purchaseList");
         return "redirect:/MyPage/purchaseList";
     }
+
+	@PostMapping("/order/buy")
+    public String buyBook(OrderRequestDTO orderRequest, HttpSession session) {
+        String userId = (String) session.getAttribute("loginId");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+
+     // 단일 주문 아이템 가져오기
+        OrderRequestDTO.OrderItemDto item = orderRequest.getItems().get(0);
+
+        List<OrderRequestDTO.OrderItemDto> items = Collections.singletonList(item);
+
+        orderService.createOrderWithDetails(userId, items);
+
+        return "redirect:/MyPage/purchaseList";
+    }
 }
+
