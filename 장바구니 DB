@@ -2,7 +2,7 @@
 --장바구니
 CREATE TABLE cart (
     cart_id    NUMBER PRIMARY KEY,
-    user_id    VARCHAR2(20) NOT NULL,
+    user_id    VARCHAR2(50) NOT NULL,
     book_id    NUMBER NOT NULL,
     quantity   NUMBER DEFAULT 1,
     cart_date  DATE DEFAULT SYSDATE,
