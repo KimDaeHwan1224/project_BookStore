@@ -104,12 +104,58 @@ public class OAuthController {
 
         // Access Token 발급
         String token = service.getAccessToken(code);
-
+        session.setAttribute("accessToken", token); // 탈퇴 시 unlink용
+        
         // 사용자 정보
         SocialUserDTO userInfo = service.getUserInfo(token);
         String email = userInfo.getEmail();
+        String providerType = userInfo.getLoginType(); // "KAKAO" / "NAVER" / "GOOGLE"
+        String socialId = userInfo.getId();
         
-        // 기존 회원 조회
+        String socialUserId = providerType.toLowerCase() + "_" + socialId;
+
+        UserDTO inactive = userService.getInactiveUser(socialUserId);
+
+        if (inactive != null) {
+
+            // 이메일 충돌 체크 (이미 누군가 active로 같은 이메일 보유)
+            UserDTO emailOwner = userService.getUserByEmail(email);
+
+            if (emailOwner != null && !"INACTIVE".equals(emailOwner.getUser_role())) {
+
+                String usedType = emailOwner.getLogin_type();
+                if (usedType == null) {
+                    usedType = "LOCAL";
+                }
+
+                session.setAttribute("socialLoginError",
+                    "이미(" + usedType + ")계정에서 사용 중인 이메일입니다. 재가입할 수 없습니다.");
+
+                return "redirect:/login";
+            }
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("user_id", socialUserId);
+            map.put("user_name", userInfo.getName());
+            map.put("user_nickname", userInfo.getNickname());
+            map.put("user_email", email);
+            map.put("login_type", providerType);
+            map.put("social_id", socialId);
+
+            userService.reactivateSocialUser(map);
+
+            UserDTO reUser = userService.getUserById(socialUserId);
+
+            session.setAttribute("loginId", reUser.getUser_id());
+            session.setAttribute("loginDisplayName", reUser.getUser_name());
+            session.setAttribute("loginType", reUser.getLogin_type());
+            session.setAttribute("userRole", reUser.getUser_role());
+
+            return "redirect:/main";
+        }
+
+
+        // ---- ACTIVE 회원 조회 ----
         UserDTO existing = userService.getUserByEmail(email);
 
         if (existing != null) {
@@ -132,7 +178,6 @@ public class OAuthController {
                 return "redirect:/login";
             }
         }
-
         // 신규 카카오 회원 등록
         Map<String, String> map = new HashMap<String,String>();
         map.put("user_id", userInfo.getLoginType().toLowerCase() + "_" + userInfo.getId());
