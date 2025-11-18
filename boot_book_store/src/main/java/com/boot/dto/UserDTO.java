@@ -27,4 +27,5 @@ public class UserDTO {
     private Date last_login_date;
     private String login_type;
     private String social_id;
+	private String user_role;
 }
