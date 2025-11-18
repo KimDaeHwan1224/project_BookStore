@@ -41,4 +41,9 @@ public interface UserService {
     
     //소셜 신규 회원 등록
     void insertSocialUser(Map<String, String> param);
+    
+    UserDTO getInactiveUser(String userId);
+    
+    // 소셜 계정 재활성화 (INACTIVE → USER)
+    void reactivateSocialUser(Map<String, Object> map);
 }
