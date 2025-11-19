@@ -202,6 +202,18 @@
       color: #fff;
       border-color: #6b4f34;
     }
+	/* 2번째 컬럼(제목) 전체 왼쪽 정렬 */
+	.table-container th:nth-child(2),
+	.table-container td:nth-child(2) {
+	  text-align: left !important;
+	  padding-left: 20px;   /* 살짝 여백 주기 */
+	}
+
+	/* 제목 링크도 왼쪽으로 꽉 차게 */
+	.table-container td:nth-child(2) .link-title {
+	  display: inline-block;
+	  width: 100%;
+	}
   </style>
 </head>
 <body>
