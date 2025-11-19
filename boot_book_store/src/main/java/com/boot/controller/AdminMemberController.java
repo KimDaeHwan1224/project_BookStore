@@ -50,8 +50,12 @@ public class AdminMemberController {
         // if (!"ADMIN".equals(session.getAttribute("userRole"))) return "redirect:/main";
 
         Map<String, Object> member = adminMemberService.getMemberById(userId);
-        model.addAttribute("member", member);
+        // 탈퇴회원이면 detail 페이지 접근 금지
+        if ("INACTIVE".equals(member.get("USER_ROLE"))) {
+            return "redirect:/admin/member/adminlist";
+        }
 
+        model.addAttribute("member", member);
         return "admin/memberDetail";
     }
 
