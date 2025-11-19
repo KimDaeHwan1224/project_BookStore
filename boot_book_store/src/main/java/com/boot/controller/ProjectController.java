@@ -64,7 +64,20 @@ public class ProjectController {
     // ------------------ 메인 ------------------
 	@GetMapping("/main")
 	public String main(HttpSession session) {
-		return "main";
+
+	    String loginId = (String) session.getAttribute("loginId");
+	    if (loginId != null) {
+
+	        // DB에서 최신 사용자 정보 다시 가져오기 → 실제 권한 불러옴
+	        Map<String, Object> userInfo = userService.getUser(loginId);
+
+	        if (userInfo != null) {
+	            session.setAttribute("userRole", userInfo.get("user_role"));
+	            session.setAttribute("loginDisplayName", userInfo.get("user_name"));
+	        }
+	    }
+
+	    return "main";
 	}
 
 	// ------------------ 관리자 메인 ------------------
@@ -73,8 +86,8 @@ public class ProjectController {
 
 	    String role = (String) session.getAttribute("userRole");
 
-	    // 로그인 안 했거나 권한이 ADMIN이 아님 → 메인으로
-	    if (role == null || !role.equals("ADMIN")) {
+	    // 권한없으면 메인으로
+	    if (!"ADMIN".equals(role)) {
 	        return "redirect:/main";
 	    }
 
