@@ -79,5 +79,17 @@
         DELETE FROM Book
         WHERE book_id = #{book_id}
     </delete>
+    
+        <select id="getRandomBooks" resultType="com.boot.dto.BookDTO">
+<![CDATA[
+    SELECT *
+    FROM (
+        SELECT *
+        FROM BOOK
+        ORDER BY DBMS_RANDOM.VALUE
+    )
+    WHERE ROWNUM <= 3
+]]>
+</select>
 
 </mapper>
