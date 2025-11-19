@@ -36,14 +36,48 @@ function switchTabByName(tabName) {
 }
 
 // 장바구니 담기
+//function addToCart() {
+//  const titleEl = document.querySelector('.product-title');
+//  const productTitle = titleEl ? titleEl.textContent.trim() : '이 상품';
+//  if (confirm(`"${productTitle}"을(를) 장바구니에 추가하시겠습니까?`)) {
+//    // TODO: 실제 서버 요청으로 교체 (예: fetch('/cart/add', {method:'POST', body:...}))
+//    alert('장바구니에 추가되었습니다!');
+//  }
+//}
 function addToCart() {
+  const bookId = document.querySelector("input[name='book_id']").value;
   const titleEl = document.querySelector('.product-title');
   const productTitle = titleEl ? titleEl.textContent.trim() : '이 상품';
+
+  if (!bookId) {
+    alert("도서 정보가 없습니다.");
+    return;
+  }
+
   if (confirm(`"${productTitle}"을(를) 장바구니에 추가하시겠습니까?`)) {
-    // TODO: 실제 서버 요청으로 교체 (예: fetch('/cart/add', {method:'POST', body:...}))
-    alert('장바구니에 추가되었습니다!');
+
+    fetch("/cartAdd", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: "book_id=" + bookId
+    })
+    .then(res => res.text())
+    .then(msg => {
+      if (msg === "success") {
+        alert("장바구니에 담겼습니다!");
+      } else {
+        alert(msg);
+      }
+    })
+    .catch(err => {
+      alert("장바구니 담기 중 오류 발생: " + err);
+    });
   }
 }
+
+
 
 // 바로 구매
 function buyNow() {
