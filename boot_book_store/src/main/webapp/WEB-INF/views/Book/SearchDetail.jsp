@@ -242,7 +242,7 @@
     </div>
   </div>
 </footer>
-
+<script src="/js/SearchDetail.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const starImages = document.querySelectorAll('#starContainer .star');
