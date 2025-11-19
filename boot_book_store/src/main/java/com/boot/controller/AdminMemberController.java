@@ -90,14 +90,35 @@ public class AdminMemberController {
     
     @PostMapping("/updateRole")
     @ResponseBody
-    public String updateRole(@RequestBody Map<String, Object> param) {
+    public String updateRole(@RequestBody Map<String, Object> param, HttpSession session) {
         System.out.println("★ 권한 변경 요청 => " + param);
 
         int updated = adminMemberService.updateRole(param);
         System.out.println("★ 업데이트된 row => " + updated);
 
+        String targetUserId = (String) param.get("user_id");
+        String newRole = (String) param.get("user_role");
+        
+        // DB 업데이트
+        adminMemberService.updateRole(param);
+
+        // 현재 로그인 유저와 동일한 계정의 권한 변경?
+        String loginId = (String) session.getAttribute("loginId");
+
+        if (loginId != null && loginId.equals(targetUserId)) {
+
+            // 세션 최신화
+            session.setAttribute("userRole", newRole);
+
+            if (!"ADMIN".equals(newRole)) {
+                session.invalidate();
+                return "REDIRECT_MAIN";
+            }
+        }
+
         return "OK";
     }
+
 
     @GetMapping("/authority")
     public String authority(Model model) {
