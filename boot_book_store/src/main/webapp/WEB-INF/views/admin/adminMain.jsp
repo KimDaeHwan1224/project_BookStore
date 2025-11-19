@@ -43,9 +43,9 @@
             <li class="nav-item">
 				<button data-page="/admin/noticeManagement">공지사항 관리</button>
 			</li>
-            <li class="nav-item">
-				<button data-page="/admin/qnaManagement">QnA 관리</button>
-			</li>
+<!--            <li class="nav-item">-->
+<!--				<button data-page="/admin/qnaManagement">QnA 관리</button>-->
+<!--			</li>-->
           </ul>
         </div>
 
@@ -58,7 +58,7 @@
 		        도서 등록/삭제/수정
 		      </button>
 		    </li>
-            <li class="nav-item"><button>재고관리</button></li>
+<!--            <li class="nav-item"><button>재고관리</button></li>-->
           </ul>
         </div>
 
