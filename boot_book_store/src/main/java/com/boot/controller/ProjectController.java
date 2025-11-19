@@ -60,15 +60,17 @@ public class ProjectController {
     private OrderService orderService;
 	@Autowired
     private WishlistService wishlistService;
+	@Autowired
+	private BookService bookService;
 
     // ------------------ 메인 ------------------
 	@GetMapping("/main")
-	public String main(HttpSession session) {
+	public String main(Model model, HttpSession session) {
 
 	    String loginId = (String) session.getAttribute("loginId");
-	    if (loginId != null) {
 
-	        // DB에서 최신 사용자 정보 다시 가져오기 → 실제 권한 불러옴
+	    if (loginId != null) {
+	    	// DB에서 최신 사용자 정보 다시 가져오기 → 실제 권한 불러옴
 	        Map<String, Object> userInfo = userService.getUser(loginId);
 
 	        if (userInfo != null) {
@@ -77,6 +79,15 @@ public class ProjectController {
 	        }
 	    }
 
+	    List<BookDTO> recommendList;
+
+	    if (loginId == null) {
+	        recommendList = bookService.getRandomBooks();
+	    } else {
+	        recommendList = bookService.getRecommendByBuy(loginId);
+	    }
+
+	    model.addAttribute("recommendList", recommendList);
 	    return "main";
 	}
 
