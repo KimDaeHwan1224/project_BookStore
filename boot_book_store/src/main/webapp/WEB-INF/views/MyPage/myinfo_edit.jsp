@@ -63,7 +63,7 @@
             <div class="grid-2">
               <div>
                 <label for="name">이름</label>
-                <input id="name" name="user_name" type="text" value="${user.user_name}" required />
+                <input id="name" name="user_name" type="text" value="${user.user_name}" required disabled/>
               </div>
               <div>
                 <label for="nickname">닉네임</label>
@@ -71,7 +71,7 @@
               </div>
               <div>
                 <label for="email">이메일</label>
-                <input id="email" name="user_email" type="email" value="${user.user_email}" required />
+                <input id="email" name="user_email" type="email" value="${user.user_email}" required disabled/>
               </div>
               <div>
                 <label for="tel">전화번호</label>
