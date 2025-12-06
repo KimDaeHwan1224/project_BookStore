@@ -45,12 +45,13 @@
 
 | 분야 | 기술 |
 |------|-------|
-| **Backend** | Spring Boot, MyBatis, Java 17 |
-| **Frontend** | JSP, JavaScript, JQuery, CSS |
-| **Database** | MySQL, ERDCloud |
-| **Infra** | AWS EC2(Ubuntu), Apache/Tomcat, GitHub |
-| **Payment** | Toss Payments API |
-| **Tools** | IntelliJ / STS, Figma, Postman, SourceTree |
+| **Frontend** | HTML5, CSS3, JavaScript, jQuery |
+| **Backend** | JSP, Java, Spring Boot, Lombok, MyBatis |
+| **Database** | Oracle Database |
+| **Infra / Server** | Apache Tomcat, GitHub |
+| **API / External Services** | Toss Payments API, Google Gemini API |
+| **Build Tool** | Gradle |
+| **Tools** | STS, Postman, Figma, SourceTree |
 
 ---
 
