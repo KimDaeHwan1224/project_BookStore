@@ -166,6 +166,27 @@
 
 ---
 
+## 📬 프로젝트 구조
+
+```plaintext
+📦 boot_bookstore
+├─ src/main/java/com.bookstore
+│  ├─ controller
+│  ├─ service
+│  ├─ dao
+│  ├─ dto
+│  └─ config
+├─ src/main/resources
+│  ├─ mapper
+│  ├─ static
+│  └─ templates(JSP)
+└─ docs
+   ├─ menu-structure.pdf
+   ├─ ui-design.pdf
+   ├─ erd.pdf
+   └─ table-definition.pdf
+```
+
 ## 🚀 시연 영상 & 데모
 
 아래 영상은 온라인 북스토어(BookShelf)의 주요 기능을 실제 화면과 함께 보여줍니다.  
@@ -222,24 +243,4 @@
 - 재고 관리  
 <img src="/docs/demo/admin.gif" width="600"/>
 
----
 
-## 📬 프로젝트 구조
-
-```plaintext
-📦 boot_bookstore
-├─ src/main/java/com.bookstore
-│  ├─ controller
-│  ├─ service
-│  ├─ dao
-│  ├─ dto
-│  └─ config
-├─ src/main/resources
-│  ├─ mapper
-│  ├─ static
-│  └─ templates(JSP)
-└─ docs
-   ├─ menu-structure.pdf
-   ├─ ui-design.pdf
-   ├─ erd.pdf
-   └─ table-definition.pdf
