@@ -123,10 +123,7 @@
 ## 🧭 메뉴 구조도 (PDF)
 
 📄 메뉴 구조도 다운로드  
-👉 [온라인_서점_메뉴구조도.pdf](https://github.com/user-attachments/files/24016521/online_bookstore_menu.pdf)
-
-
-
+👉 [menu_structure_online_bookstore.pdf](https://github.com/user-attachments/files/24016562/menu_structure_online_bookstore.pdf)
 
 
 ---
