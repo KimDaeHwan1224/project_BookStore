@@ -161,7 +161,8 @@
 
 📸 스크린샷
 
-(여기에 이미지 삽입)
+![Uploading image.png…]()
+
 
 </details>
 
